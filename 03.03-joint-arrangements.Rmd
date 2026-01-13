@@ -1,0 +1,363 @@
+# Jointly, Jointly into that dark night
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+library(tidyverse)
+library(kableExtra)
+```
+
+## Let's take positions on the Parade
+
+Suppose we took positions at the 4 corners of Edward's Parade to count people passing by? We did this to inform a decision to locate a news and treats kiosk at one of the corners. We investigate how foot traffic behavior at location McShane ($x$) is related to, might depend on, or even cause traffic flowing through location Dealy ($y$). Both locations are adjacent to one another on the eastern side of Edward's Parade.
+
+### Query 1
+
+Here are the two series we will work with for foot traffic at the two locations arranged in (overlapping) order.
+
+| $x$ | 2 | 2 | 3 | 4 | 6 | - | - | - |
+|:----:|:----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| $y$ | - | - | - | 4 | 5 | 5 | 7 | 8 |
+
+1. What is the Tukey 5-statistic empirical distribution of each series?
+
+2. Use this empirical distribution to justify univariate sets of low and high hypotheses, one set for each series.
+
+Here is a rendering of a probabilistic analysis for each series using a Poisson observational distribution to link hypotheses with data. Why Poisson, why not binomial, or normal, or uniform? Verify Excel's `=POISSON()` calculates 0.0902 for $Pr(d=4,h=2)$ where d is a data point and h is a hypothesis. What is the definition of $\lambda$ with a practical example from the context of this study? 
+
+```{r}
+#McShane
+grid_M <- c(2,5)
+data_M <- c(2,2,3,4,6)
+data_D <- c(4,5,5,7,8)
+LL1 <- dpois(data_M,grid_M[1])
+LL2 <- dpois(data_M,grid_M[2])
+prod1 <- prod(LL1)
+prod2 <- prod(LL2)
+sumM <- prod1*0.5+prod2*0.5
+phd1 <- prod1*0.5/sumM
+phd2 <- prod2*0.5/sumM
+```
+
+
+**McShane foot traffic**
+
+|$\lambda$ | $Pr(\lambda)$ | `r data_M` | $Pr(d \mid h)$ |$Pr(d \mid h)Pr(\lambda)$ | $Pr(h \mid d)$ |
+|----|-----|-----------|-----------|--------|------|
+| `r grid_M[1]` | 0.50 | `r round(t(LL1),4)` | `r prod1` | `r prod1*0.5` | `r round(phd1,4)` |
+| `r grid_M[2]` | 0.50 | `r round(t(LL2),4)` | `r prod2` | `r prod2*0.5` | `r round(phd2,4)` |
+
+
+```{r}
+#Dealy
+grid_D <- c(4,9)
+data_D <- c(4,5,5,7,8)
+LL1 <- dpois(data_D,grid_D[1])
+LL2 <- dpois(data_D,grid_D[2])
+prod1 <- prod(LL1)
+prod2 <- prod(LL2)
+sumM <- prod1*0.5+prod2*0.5
+phdD1 <- prod1*0.5/sumM
+phdD2 <- prod2*0.5/sumM
+exD <- round(exp(-4)*(4^5)/factorial(5),5)
+```
+
+**Dealy foot traffic**
+
+|$\lambda$ | $Pr(\lambda)$ | `r data_D` | $Pr(d \mid h)$ |$Pr(d \mid h)Pr(\lambda)$ | $Pr(h \mid d)$ |
+|----|-----|-----------|-----------|--------|------|
+| `r grid_D[1]` | 0.50 | `r round(t(LL1),4)` | `r prod1` | `r prod1*0.5` | `r round(phdD1,4)` |
+| `r grid_D[2]` | 0.50 | `r round(t(LL2),4)` | `r prod2` | `r prod2*0.5` | `r round(phdD2,4)` |
+
+
+What are the most plausible hypotheses for Dealy ($y$) and McShane ($x$) foot traffic average intensities in 3 minute intervals? How did you pick these most plausible hypotheses? In what sense are they the most informative hypotheses?
+
+### Query 2
+
+Next we want to examine the dependency of one location on the other. This exercise amounts to analyzing the incredibly simple social network of passersby to and from McShane and Dealy along Edward's Parade. We start with asking how dependent is Dealy ($y$) on McShane ($x$) using this simple relationship: $\mu_{y|x} = a + bx$, where $\mu_{y|x}$ is the mean level of foot traffic at Dealy conditional on foot traffic from McShane. It is up to us to determine $a$ and $b$ and their interpretation. Here we ask what we can expect of Dealy foot traffic in the presence of McShane foot traffic.
+
+A. We will use this parameterized joint probability table to aid our investigation. The parameter $q$ is uniformly distributed with a minimum of 0 and maximum of 0.2. Explain how it is that these are the two bounds on $q$ for this dependency structure? What is the role of the marginal probabilities and where did they come from?
+
+| $(x\downarrow) (y \rightarrow)$ | 4 | 9 | $Pr(x)$ |
+|------|-----|-----|------|
+|2 |$0.2+q$ | $0.2-q$ | 0.4 |
+| 5 |$0.6-q$ | $q$ | 0.6 |
+|$Pr(y)$ | 0.8 | 0.2 | 1.0 |
+
+B. Since we already know the probabilities of the two sets of hypothetical $\lambda$s, calculate the expected values and variances (and standard deviations) of McShane $x$ and Dealy $y$. Using the joint probabilities parameterized by $q$, calculate the covariance of $x$ and $y$ as a function of $q$.
+
+C. Since $q$ is drawn from a uniform distribution, any draw is equally likely. What are the two values of $q$ for lower and upper bounds of a probability interval centered at the median of $q$ between which 95\% probability resides? Derive two dependency structures, to derive a 95\% probability interval for the $b$ parameter in the dependency relation $y=a+bx$.
+
+D. Using the two dependency structures, calculate and interpret the 95\% probability interval for $b$. Sketch the interval on a distribution. What are the implications for foot traffic at Dealy given foot traffic at McShane?
+
+\newpage
+
+## Query 1: compare and contrast
+
+A. Here are the two series we will work with for foot traffic at the two locations arranged in (overlapping) order.
+
+| $x$ | 2 | 2 | 3 | 4 | 6 | - | - | - |
+|:----:|:----:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| $y$ | - | - | - | 4 | 5 | 5 | 7 | 8 |
+
+1. What is the Tukey 5-statistic empirical distribution of each series?
+
+2. Use this empirical distribution to justify univariate sets of low and high hypotheses, one set for each series.
+
+| statistic | $x$ McShane | $y$ Dealy |
+|:---:|:---:|:---:|
+|min |  2 | 4 |
+| 25\% | 2 | 5 |
+| 50\% | 3 | 5 |
+| 75\% | 4 | 7 |
+|max | 6 | 8 |
+
+Possible low intensity $\lambda$ could well be 2 for McShane (min and 25\%) and 4 (just minimum as 5 is prominent) for Dealy. High intensity $\lambda$ would be the max as 75\% is 2 below max for McShane and 8 for Dealy. Apparently the team went for 9. We will need to interview them to find out something we don't know.
+
+B. Here is a rendering of a probabilistic analysis for each series using a Poisson observational distribution to link hypotheses with data. Why Poisson, why not binomial, or normal, or uniform? Verify Excel's `=POISSON()` calculates 0.0902 for $Pr(d=4,h=2)$ where d is a data point and h is a hypothesis. What is the definition of $\lambda$ with a practical example from the context of this study? 
+
+```{r}
+#McShane
+grid_M <- c(2,5)
+data_M <- c(2,2,3,4,6)
+data_D <- c(4,5,5,7,8)
+LL1 <- dpois(data_M,grid_M[1])
+LL2 <- dpois(data_M,grid_M[2])
+prod1 <- prod(LL1)
+prod2 <- prod(LL2)
+sumM <- prod1*0.5+prod2*0.5
+phd1 <- prod1*0.5/sumM
+phd2 <- prod2*0.5/sumM
+```
+
+
+**McShane foot traffic**
+
+|$\lambda$ | $Pr(\lambda)$ | `r data_M` | $Pr(d \mid h)$ |$Pr(d \mid h)Pr(\lambda)$ | $Pr(h \mid d)$ |
+|----|-----|-----------|-----------|--------|------|
+| `r grid_M[1]` | 0.50 | `r round(t(LL1),4)` | `r prod1` | `r prod1*0.5` | `r round(phd1,4)` |
+| `r grid_M[2]` | 0.50 | `r round(t(LL2),4)` | `r prod2` | `r prod2*0.5` | `r round(phd2,4)` |
+
+
+```{r}
+#Dealy
+grid_D <- c(4,9)
+data_D <- c(4,5,5,7,8)
+LL1 <- dpois(data_D,grid_D[1])
+LL2 <- dpois(data_D,grid_D[2])
+prod1 <- prod(LL1)
+prod2 <- prod(LL2)
+sumM <- prod1*0.5+prod2*0.5
+phdD1 <- prod1*0.5/sumM
+phdD2 <- prod2*0.5/sumM
+exD <- round(exp(-4)*(4^5)/factorial(5),5)
+```
+
+**Dealy foot traffic**
+
+|$\lambda$ | $Pr(\lambda)$ | `r data_D` | $Pr(d \mid h)$ |$Pr(d \mid h)Pr(\lambda)$ | $Pr(h \mid d)$ |
+|----|-----|-----------|-----------|--------|------|
+| `r grid_D[1]` | 0.50 | `r round(t(LL1),4)` | `r prod1` | `r prod1*0.5` | `r round(phdD1,4)` |
+| `r grid_D[2]` | 0.50 | `r round(t(LL2),4)` | `r prod2` | `r prod2*0.5` | `r round(phdD2,4)` |
+
+For example, here is a calculation of $Pr(d=x=5 \mid h=\lambda=4)$ using the Poisson density.
+
+$$
+Pr(d=5 \mid h=4) = e^{-\lambda}\frac{\lambda^x}{x!}
+$$
+$$
+= e^{-5}\frac{4^5}{5!} = (0.007)\frac{1024}{120} = `r exD`
+$$
+
+In further studies we might consider using the Gaussian density. But I think we get the point nicely with the one parameter Poisson distribution. 
+
+- We would not use the binomial because binomial uses binary, either-or 0 and 1 inputs. Its data is the number of trials $n$ and the number of successes given a hypothesis of the probability of a single success $p$.
+
+- The Poisson aggregates binomial successes and hypothesizes the intensity of those successes against the number of trials as the probability of a single binomial success: $p=\lambda/n$. It is right for this job because the aggregation of binomial successes (we observe numbers of persons visiting our location) are integer counts.
+
+- We could use the more complicated Gaussian (normal) distribution which related to rational and so-called real numbers. Two parameters are involved initially. In any case any parameter distribution we estimate will be distributed as Gaussian since those parameters will be weighted average expectations, and according to the Central Limit Theorem, will converge on a Gaussian distribution.
+
+C. What are the most plausible hypotheses for Dealy ($y$) and McShane ($x$) foot traffic average intensities in 3 minute intervals? How did you pick these most plausible hypotheses? In what sense are they the most informative hypotheses?
+
+- For Dealy it is $\lambda=4$ since this is $0.8/0.2=4x$ more likely than the alternative to occur given the data. For McShane it is $\lambda=5$ as this is $0.6/0.4=1.5x$ as likely as the alternative. 
+
+- These odds ratios are probabilities derived from both the probability we believe the hypothesis would occur (50/50) and the probabilities of each of the observations given each hypothesis. 
+
+- Multiplied together (both-and counting rule) we have two likelihoods for two hypotheses. 
+
+- We then sum the two alternative likelihoods (one for each hypothesis) to get the total probability of the data given the hypotheses. 
+
+- We use this sum to normalize the likelihoods, that is, gauge their contribution to the plausibility of hypotheses. This effectively deploys Bayes Rule, to impute the probability of each hypothesis given the data. 
+
+- The most plausible hypothesis is the most likely given the data.
+
+- The most plausible is the most informative because it contains the most content of the data given the hypothesis. By content we would mean the highest count of ways in which the hypothesis might occur.
+
+That's how and a bit of why!
+
+## Query 2: cause and effect
+
+Here we examine the dependency of one location on the other. TWe start with asking how dependent is Dealy ($y$) on McShane ($x$) using this simple relationship: $\mu_{y|x} = a + bx$, where $\mu_{y|x}$ is the mean level of foot traffic at Dealy conditional on foot traffic from McShane. 
+
+A. We will use this parameterized joint probability table to aid our investigation. The parameter $q$ is uniformly distributed with a minimum of 0 and maximum of 0.2. Explain how it is that these are the two bounds on $q$ for this dependency structure? What is the role of the marginal probabilities and where did they come from?
+
+| $(x\downarrow) (y \rightarrow)$ | 4 | 9 | $Pr(x)$ |
+|------|-----|-----|------|
+|2 |$0.2+q$ | $0.2-q$ | 0.4 |
+| 5 |$0.6-q$ | $q$ | 0.6 |
+|$Pr(y)$ | 0.8 | 0.2 | 1.0 |
+
+- We will take $x=\lambda=[2,5]$ average intensities of foot traffic at the McShane location. These read either 2 or 5 persons show up in 3-minute intervals on average. 
+
+- We similarly take $x=\lambda=[4,9]$ average intensities of foot traffic at the Dealy location. These read either 4 or 9 persons show up in 3-minute intervals on average. 
+
+- Both of these are hypotheses about foot traffic data, assumed to be observed with a Poisson distribution. THe marginal probabilities encode the information contained in the sampled data in concert with unobserved information in hypotheses about the sampled data.
+
+We have parameterized our social network of 2 nodes: $McShane \rightarrow Dealy$, with $q\in [0,0.2]$. 
+
+- We need to parameterize the joint probability table simply because there are many possible dependency structures. In our framework we will inject different values of $q$ to generate different values of $\sigma_{xy}= covariance$ the only statistic which depends on the joint probabilities. Mean and standard deviations are expectations and depend only on the marginal probabilities.
+
+- A simple test of putting in $q<0$ results in a negative probability in the lower right $Pr(2,9)$. As it is probabilities are entities only in our minds, and a negative probability has no meaning in the range of false (probability=0) to true (probability=1) plausibilities.
+
+- If $q>0.2$, say $q=2.01$, then the joint probability of 2 and 9 is $0.2-2.01=-1.81$, definitely not a probability since it too is negative and also exceeds 1 in absolute value!
+
+We will use these results later, and more importantly, the underlying logic and reasoning in these parameterized dependency structures.
+
+B. Since we already know the probabilities of the two sets of hypothetical $\lambda$s, calculate the expected values and variances (and standard deviations) of McShane $x$ and Dealy $y$. Using the joint probabilities parameterized by $q$, calculate the covariance of $x$ and $y$ as a function of $q$.
+
+Whatever the value of $q$ we have these results.
+
+$\mu_x = Ex = 0.4(2) + 0.6(5) = 0.8 + 3 = 3.8$
+$\mu_y = Ey = 0.8(4) + 0.2(9) = 3.2 + 1.8 = 5$
+
+$\sigma_x^2 = Var(x) = Ex^2 - \mu_x^2 = 0.4(4)+0.6(25) - 3.8^2 = 2.16$
+$\sigma_x = 2.16^{1/2} = 1.47$
+
+$\sigma_y^2 = Var(y) = Ey^2 - \mu_y^2 = 0.8(16)+0.2(81) - 5^2 = 4$
+$\sigma_y = 4^{1/2} = 2$
+
+The covariance depends on the value of $q$ because joint probabilities determine the expectation structure of covariance.'
+
+$\sigma_{xy} = Cov(x,y) = Exy - \mu_x \mu_y$
+$= (0.2+q)(8)+(0.2-q)(18)+(0.6-q)(20)+0.0(45) - (3.8)(5)$ 
+$= -1.8+15q$
+
+C. Since $q$ is drawn from a uniform distribution, any draw is equally likely. What are the two values of $q$ for lower and upper bounds of a probability interval centered at the median of $q$ between which 95\% probability resides? Derive two dependency structures, to derive a 95\% probability interval for the $b$ parameter in the dependency relation $y=a+bx$.
+
+- We carve up the $b$ distribution into three pieces which, when added up, give us 100% of the distribution governing $b$: area 1 is the left tail of cumulative probability weighing in at $2.5\%$ of the distance from $q=0$ to $q=0.2$: this gives us $q_{0.025}=0.025\times 0.2=0.001$. 
+
+- We add another $95\%$ to get us through area 2 to a cutpoint of $97.5\%$ of the distance from $q=0$ to $q=0.2$: this gives us $q_{0.975}=0.975\times 0.2=0.195$. This leaves another $2.5\%$ in the third area, the upper tail, to achieve $100\%$ probability under a supposed distribution for $b$.
+
+- It is worth noting that the median of $q$ is $50\%$ of the distance from $q=0$ to $q=0.2$: this gives us $q_{0.5}=0.5\times 0.2=0.1$.
+
+- What is the shape of this distribution? We can invoke a version of the Central Limit Theorem to repeatedly sample data given hypotheses to calculate sampled expectations of covariances and variances, all averages. Thus we would expect the distribution of $b$ to be Gaussian (normal, bell-shaped) and thus symmetric about the median value of $b$, where $q=0.1$.
+
+$q=0.001$ for a bound at $2.5\%$
+
+| $(x\downarrow) (y \rightarrow)$ | 4 | 9 | $Pr(x)$ |
+|------|-----|-----|------|
+|2 |$0.201$ | $0.199$ | 0.4 |
+| 5 |$0.599$ | $0.001$ | 0.6 |
+|$Pr(y)$ | 0.8 | 0.2 | 1.0 |
+
+$q=0.195$ for a bound at $97.5\%$
+
+| $(x\downarrow) (y \rightarrow)$ | 4 | 9 | $Pr(x)$ |
+|------|-----|-----|------|
+|2 |$0.395$ | $0.005$ | 0.4 |
+| 5 |$0.405$ | $0.195$ | 0.6 |
+|$Pr(y)$ | 0.8 | 0.2 | 1.0 |
+
+We note that all joint probabilities are positive and rows and columns add up to their marginal probabilities.
+
+D. Using the two dependency structures, calculate and interpret the 95\% probability interval for $b$. Sketch the interval on a distribution. What are the implications for foot traffic at Dealy given foot traffic at McShane?
+
+Let's suppose we develop lots of values of $b$ using draws from an uniform distribution (a constant probability density) with a minimum of $q=0$ to a maximum of $q=0.2$. 
+
+- We can ask what is the value of $b$ with cumulative probability 2.5\% and corrsponding value of $b$ with cumulative probability 97.5\%. These levels would correspond to a $q=0.025*0.2=0.005>0$ the minimum $q$ for the ostensibly low $b$ and $q=0.975*0.2=0.195<0.2$ the maximum $q$ for the corresponding value of $b$. 
+
+- The median is a cumulative probability of 50\% and is just in the middle of 0 and 0.2, that is, 0.1. Altogether these are very convenient cut-points in what would be a Gaussian distribution of $b$'s due to the Central Limit Theorem, which we all know, and often revere.
+
+At $q(0.025)=0.005$
+
+$b = \frac{Cov(x,y)}{Var(x)}$
+$= \frac{-1.8+15(0.005)}{2.16}$
+$=-0.7986$
+
+It turns out thw $a=\mu_y - b_{q=0.005}\mu_x$
+$= 5-(-0.80)(3.8) = 8.04$ so that $\mu_{y|x}^{q=0.005} = 8.04 - 0.8 x$
+
+At $q(0.500)=0.100$
+
+$b = \frac{Cov(x,y)}{Var(x)}$
+$= \frac{-1.8+15(0.100)}{2.16}$
+$=-0.1390$
+
+$a=\mu_y - b_{q=0.1}\mu_x$
+$= 5+0.1389(3.8) = 5.54$
+
+$\mu_{y|x}^{q=0.1} = 5.54 - 0.1389 x$
+
+
+At $q(0.975)=0.195$
+
+$b = \frac{Cov(x,y)}{Var(x)}$
+$= \frac{-1.8+15(0.195)}{2.16}$
+$=0.5208$
+
+$a=\mu_y - b_{q=0.195}\mu_x$
+$= 5-0.5208(3.8) = 3.02$
+
+$\mu_{y|x}^{q=0.1} = 3.02 + 0.5208 x$]
+
+```{r}
+q <- c(0.005,0.1,0.195)
+mu_b <- (-1.8+15*q)/2.16
+sig_b <- 0.4
+curve(dnorm(x, mu_b[2], sig_b), from=mu_b[2]-2*sig_b, to=mu_b[2]+2*sig_b,
+      col = "blue", ylab = "Pr(b)", xlab = "b", lwd=1.75, main = "b: distributon and CI")
+abline(v=mu_b[1], lty=2)
+abline(v=mu_b[2], lty=2)
+abline(v=mu_b[3], lty=2)
+text(x = -0.75, y = 0.3,                # Text with different color & size
+     "Lower 2.5%, q=0.005",
+     col = "black",
+     cex = 0.8)
+text(x = -0.75, y = 0.2,                # Text with different color & size
+     round(mu_b[1],3),
+     col = "black",
+     cex = 0.8)
+text(x = -0.1, y = 0.3,                # Text with different color & size
+     "Median 50%, q=0.100",
+     col = "black",
+     cex = 0.8)
+text(x = -0.1, y = 0.2,                # Text with different color & size
+     round(mu_b[2],3),
+     col = "black",
+     cex = 0.8)
+text(x = 0.5, y = 0.3,                # Text with different color & size
+     "Upper 97.5%, q=0.195",
+     col = "black",
+     cex = 0.8)
+text(x = 0.5, y = 0.2,                # Text with different color & size
+     round(mu_b[3],3),
+     col = "black",
+     cex = 0.8)
+text(x = -0.1, y = 0.7,                # Text with different color & size
+     "95%",
+     col = "black",
+     cex = 1.2)
+```
+
+We have just estimated a 95\% probability interval for $b$. A proper probability statement is this.
+
+$$
+Pr( -0.7936 \leq b \leq 0.5208 ) = 0.95
+$$
+
+- It is 95\% plausibly consistent with the data to find a $b$ somewhere between $-0.7986$ and $0.5208$, mostly negative.
+
+- Since the distribution is (plausibly symmetric) half of the distance spanned by the lower and upper bounds of $b$ ought to give us the median (50th quantile) $b=(0.5208+(-0.7936))/2\approx -0.1364$.
+
+- Thus in the dependency relationship $\mu{y|x}=a+bx$, the presence of 10 persons _at McShane_ (not necessarily doing anything else) could impact foot traffic _at Dealy_ in a range from 1) reducing Dealy foot traffic by $0.7936\times 10 \approx 8$ persons to 2) increasing foot traffic at Dealy by $0.5208\times 10\approx 5$ persons. 
+
+The end of the lesson! This is definitely a good place to stop as well.

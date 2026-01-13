@@ -1,0 +1,128 @@
+# Logic Exercises
+
+Our ability to model events, decisions, policies depends on the framing of arguments, definition of terms, posing relationships among those terms, and at the very least determining the logical coherence of the argument, result, implication. We will use these methods to build a skein of hypotheses against which we will sample data, count the ways in which the data are consistent with hypotheses, and ultimately infer results.
+
+### 1. Liquidity and credit facilities
+
+> “We have sufficient liquidity to meet all of our obligations over the next twelve months without drawing on our revolving credit facility. However, if market conditions deteriorate significantly, we will need to draw on the facility to meet those obligations. Current market conditions have not deteriorated significantly.”
+
+**Propositional encoding:**
+
+Let:
+
+- $L$: “We have sufficient liquidity to meet all obligations over the next 12 months.”
+- $D$: “We need to draw on the revolving credit facility to meet those obligations.”
+- $M$: “Market conditions deteriorate significantly.”
+
+From the passage, we can reasonably formalize:
+
+1. $\lnot D \rightarrow L$  
+   (If we do not draw on the facility, then we have sufficient liquidity.)
+2. $M \rightarrow D$  
+   (If markets deteriorate significantly, we will need to draw.)
+3. $\lnot M$  
+   (Current markets have not deteriorated significantly.)
+4. $\lnot D$  
+   (We will not draw on the facility — this is implied by “without drawing on” in the first sentence.)
+
+**Questions**
+
+- **Consistency:** Are propositions $1$–$4$ logically consistent?
+- **Entailment:** From $1$ and $4$, does it follow that $L$ must be true?
+- **Counterfactual exploration:** What can be said about the truth value of $D$ if instead we assumed $M$ is true?
+
+### 2. Profit growth, cost inflation, and guidance
+
+> “We will achieve double-digit profit growth this year only if we keep annual cost inflation below three percent. We will not keep annual cost inflation below three percent. Nevertheless, we expect to achieve double-digit profit growth this year.”
+
+Let:
+
+- $G$: “We achieve double-digit profit growth this year.”
+- $C$: “We keep annual cost inflation below three percent.”
+
+A natural formalization is:
+
+1. $G \rightarrow C$  
+   (“Only if” = $G$ implies $C$.)
+2. $\lnot C$  
+   (We will not keep cost inflation below 3%.)
+3. $G$  
+   (We expect to achieve double-digit profit growth.)
+
+**Questions**
+
+- **Consistency:** Are $1$, $2$, and $3$ jointly consistent?
+- **Derivation:** Show that from $1$ and $3$ we can derive $C$, and then combine with $2$ to derive a contradiction.
+- **Interpretive question:** How does this illustrate tension between “risk factor” and “guidance” language in corporate disclosures?
+
+### 3. Market share, pricing strategy, and competition
+
+> “If we increase prices in our core segment, we will lose market share unless our main competitor also increases its prices. Our main competitor will not increase its prices. We will increase prices in our core segment. We will not lose market share.”
+
+Let:
+
+- $P$: “We increase prices in our core segment.”
+- $S$: “We lose market share.”
+- $C$: “Our main competitor increases its prices.”
+
+The structure of “A unless B” is naturally treated as “if A and not B then S”. So:
+
+1. $(P \land \lnot C) \rightarrow S$  
+2. $\lnot C$  
+3. $P$  
+4. $\lnot S$
+
+**Questions**
+
+- **Consistency:** Are $1$–$4$ jointly consistent?
+- **Derivation:** Show that from $2$ and $3$ we get $P \land \lnot C$, then use $1$ to infer $S$, and finally clash with $4$.
+- **Extension:** Rewrite the passage to make it logically consistent, then re-symbolize anda chech for consistency and derivation.
+
+### 4. Liquidity buffers, asset sales, and regulatory requirements
+
+> “If our liquidity buffer falls below the regulatory minimum, we will either sell liquid assets at a discount or raise short-term funding in the market. We will not sell liquid assets at a discount. Our liquidity buffer will fall below the regulatory minimum. We will not raise short-term funding in the market.”
+
+Let:
+
+- $B$: “Our liquidity buffer falls below the regulatory minimum.”
+- $A$: “We sell liquid assets at a discount.”
+- $F$: “We raise short-term funding in the market.”
+
+“Either … or …” in risk language is typically inclusive unless specified. So:
+
+1. $B \rightarrow (A \lor F)$  
+2. $\lnot A$  
+3. $B$  
+4. $\lnot F$
+
+**Questions**
+
+- **Consistency:** Are these four propositions consistent?
+- **Derivation:** From $1$ and $3$, derive $A \lor F$. Show why $2$ and $4$ together with this lead to a contradiction.
+- **Conceptual twist:** How would the logic change if the phrase “either … or … but not both” were explicitly used? We will formalize this language as $B \rightarrow (A \oplus F)$ where $\oplus$ is the exclusive or $XOR$.
+
+### 5. Going concern, refinancing, and macro conditions
+
+> “We will remain a going concern over the next twelve months if, and only if, we successfully refinance our upcoming debt maturities and macroeconomic conditions do not deteriorate materially. Macroeconomic conditions will deteriorate materially. We will successfully refinance our upcoming debt maturities. We will remain a going concern over the next twelve months.”
+
+Let:
+
+- $G$: “We remain a going concern over the next 12 months.”
+- $R$: “We successfully refinance our upcoming debt maturities.”
+- $M$: “Macroeconomic conditions deteriorate materially.”
+
+“If, and only if” results in a a biconditional statement.
+
+1. $G \leftrightarrow (R \land \lnot M)$  
+2. $M$  
+3. $R$  
+4. $G$
+
+**Questions**
+
+- **Decomposition:** Split $1$ into two conditionals to model the biconditional statement.
+  - $G \rightarrow (R \land \lnot M)$  
+  - $(R \land \lnot M) \rightarrow G$
+- **Consistency:** Are $1$–$4$ jointly consistent?
+- **Derivation:** From $1$ and $4$, derive $R \land \lnot M$; from that, derive $R$ and $\lnot M$. Compare $\lnot M$ with $2$ (i.e., $M$). Show the contradiction.
+

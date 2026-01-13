@@ -1,0 +1,9 @@
+# Topic 4 -- Multiple Regressors, Oh my! {-}
+
+- More than one source of explanation
+
+- Confounding
+
+- Causal analysis
+
+- Risk and uncertainty

@@ -1,0 +1,18 @@
+# Topic 1 -- The Basics {-}
+
+![Entering the garden of forked paths.](images/topic1.jpg)
+
+@borgesjlJardinSenderosQue1941 sends a man through a labyrinth of a garden of "forked paths." By analogy Bayesian inference is really just counting and comparing possibilities, those _forked paths_. Like Borges' character, we encounter numerous logical, causal, practical paradoxes and contradictions, often galore. For each possibility we decide to go left, go right; ah, we choose left. We reach another contradiction, another fork, do go left again, right or stand still? As we move outwards from any position, any possibility we continue to branch into an ever expanding, emergent, garden of forked paths.
+
+Well, we are here to continue to learn to make reasonable inferences about what might happen given what has already been revealed as happening. In this way Bayesian analysis helps us structure our understanding about what could have happened, and might happen again. Borges' forks are alternative sequences of events in schemes of recurrence. It is interesting that as we proceed through the garden we discard paths along the way. We go left, forever never taking that particular right path. We keep going until we reach a condition which Bernard @lonergan_insight calls the virtually unconditioned judgment of what is logically at the end of a seemingly endless sequence of forks. 
+
+We arrive at the end of the current journey where what *might be* is what is logically *consistent with what we observed.* The result is *virtual* so there is no guarantee we have an absolutely correct, right answer. We may raise more questions, emitting more forks. We have the best answer reasonably available in the here and now which can be derived from the data and the conjectures fed into our understanding. 
+
+We explore these areas from our past (at least since 6th grade) and extend them into our current work.
+
+- Basic logic to help us form consistent arguments, conjectures, hypotheses, and interpretations of analytical results.
+
+- The BayesBox, the workhorse of our statistical inference engine, which mashes together data with hypotheses. This device, a true robot, emerges from our work with contingency tables.
+
+- Measures of probabilistic expectations. This will help us summarize the risks along the forked paths. But we will need to wait a bit to handle our view of uncertainty, the known unknown, the forked paths we have yet to discern.
+

@@ -1,0 +1,196 @@
+# ECON/SABU-2142-R0X -- Statistics II - Syllabus {-}
+
+### Foote: Spring 2026 (revised 2026-12-01)
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+| **Instructor:** Bill Foote | **Phone/Text:**	917-767-7980 (mobile) |
+|----:|:----|
+| Email: <wfoote@fordham.edu> | Zoom:	<https://us02web.zoom.us/j/9177353014> |
+| MR 2:30 PM - 3:45 PM | Dealy 206 |
+| MR 4:00 PM - 5:15 PM | Dealy 101 |
+| Office Hours: MR 12:30 PM - 2:00 PM | and by appointment |
+| Github: <https://github.com/wgfoote/book-stats-ii> | CV: [available here](https://drive.google.com/file/d/1T6f9GbfbWnBTN2jCa5B-gl4EyYEn5k0L/view?usp=sharing) IG:<https://www.instagram.com/williamgfoote/> |
+
+### Overview
+
+**Course Description.** This computer-assisted course develops the student's ability to collect data, postulate a hypothesis or a model, select the appropriate statistical technique, analyze the data using statistical software, draw correct statistical inferences, and clearly summarize the findings. Specific topics include chi-square tests, analysis of variance, simple and multiple regression and correlation models, time series analysis, and quality control.
+
+**Learning Goals.** Upon completion of this course, the student should be able to sample, organize, visualize, and describe data using basic statistical indicators. The student should be able to join this exploratory analysis with a probabilistic explanation and inference based on the formation of hypotheses linked to observational distributions of sampled data. Additionally, the student should be able to apply exploratory and probabilistic techniques to support, inform and communicate personal and organizational decisions and their outcomes to the consumers of the analysis.
+
+**Course Delivery.** In person, with a ["flipped" classroom](https://en.wikipedia.org/wiki/Flipped_classroom) hands-on learning environment using spreadsheets, peppered with interactive demonstrations and videos.
+
+**Office Hours.** Monday and Thursday 12:00 PM to 2:00 PM. Office hours will be conducted in person or virtually by appointment on Zoom.
+
+**Course Webpage.** Fordham Blackboard Learning Management System (LMS). All assignments, course announcements and other resources will be posted on Blackboard. Please check the course page frequently.
+
+**Recommended Textbooks.** Foote, _Stats II_ [Course Notes available here.](https://stats-two.netlify.app/); Wayne Winston (2021) [Microsoft Excel Data Analysis and Business Modeling (Office 2021 and Microsoft 365)](https://www.amazon.com/Microsoft-Analysis-Business-Modeling-Office-ebook/dp/B0DFWYFFFB/ref=sr_1_2?crid=2HXWTESF4687E&dib=eyJ2IjoiMSJ9.vFr1Cc6NLnhB2rPvRcOeLbm_daEfusA_l3JCttrPNNo2SjvJmWEyIo2QELqS5COMPR9hV6_lTjwNQdqdcXQXf0c4SM70kWvVMKCBYQVhgoijLZAAhTgb81VdBIejiPY8hrIGnSIlTzWDneANHKe6J-R0z8g7qQ_NeEvhQX0dWniWT_n6Y0q6Y6tgCpy4AIjI.nwvFJqAlY3JHjtwEJ5-FArX26LeeefV3hqaMvTcDoLA&dib_tag=se&keywords=wayne+winston&qid=1767830223&s=digital-text&sprefix=wayne+winston%2Cdigital-text%2C155&sr=1-2); Anderson, Sweeney, Williams, (Cengage: 2025), 8th edition. [hereinafter _ASW_]. [Available from Cengage here.](https://www.cengage.com/c/modern-business-statistics-with-microsoft%C3%A2-excel%C3%A2-8e-camm-cochran-fry-ohlmann-anderson-sweeney-williams/9780357929889/); James D. Long and Paul Teetor (2019), _R Cookbook 2nd Edition_. O'Reilley: Sebastopol, CA, [accessible here](https://rc2e.com/)
+
+**Grading Policy.** The course grade will be determined according to the following percentages of effort in the course and instructor judgment as to the quality of submitted work according to Fordham's grading policy.
+
+- Class Participation: 10\% (formative)
+- Homework: 35\% (formative)
+- Midterm: 20\% (formative)
+- Final: 35\% (evaluative)
+
+**Fordham’s Grading Policy:** Please be aware of the [University’s grading policy.](https://bulletin.fordham.edu/undergraduate/academic-policies-procedures/grading-and-exams/).
+
+**Attendance is mandatory.** If you cannot show up email or text me beforehand so I can help you plan your work. Throughout the semester, there will be formative, in class, and not-previously announced quizzes. Homework assignments align with the 5 topics we cover in this course. The quizzes will consist of short answer questions to check our understanding. The homework assignments will involve longer answers with assumptions, calculations, graphics, interpretations as needed to develop skills and capabilities to analyze economic scenarios. 
+
+_All homeworks must be completed_ to earn homework (35\%) credit. Homework, and class meeting demonstrations and examples will all be recorded in a _required hand-written notebook_. Class meeting participation (10\%) will partly be evidenced by your notebooks. The midterm and final exam will be a combination of short and long answer questions. Although we will work in small groups in and outside of class, each individual student is responsible to submit homework assignments.
+
+**Course computational platforms.** Other than your notebook and calculator, the course relies on the Microsoft 365 Excel spreadsheet environment. You can [download this application here.](https://www.fordham.edu/information-technology/standard-software/microsoft-office/) In addition, this course will introduce the R programming language and the use of RStudio, a professional grade integrated development environment (IDE). You may [download the R Programming Language for Windows here](https://cran.r-project.org/bin/windows/base/). Mac OS users have a similar download site. We will work through logistics during class time.
+
+### Pre-requisites
+
+The minimal requirements as we walk into these topics include:
+
+- A willingness to reflect on, question, and participate in substantive discussions about alternative, and sometimes competing and even disturbing, views about the decisions we make, the tools we use, including the technologies of economics, growth, progress, decline, power and authority.
+
+- Professional writing standards, including, bibliographic, organizational logic, use of English grammar, syntax, semantics. Imagine that our essays will be published in our favorite media outlets and we do not want the editor to revise or otherwise delay publication of our fine work for anything but clarity of content.
+
+- Basic arithmetic, some elementary algebra, and the ability to use a pencil and paper (or their equivalents) to write and figure out the little bit of arithmetic (multiplication and addition) and algebra (elementary monomial expressions) to understand the deeper viscera of economic process, practice, models, objectives, the good of order. Along the way we will be able to give hermeneutical expression to otherwise vacuously literal propositions.
+
+### Premise and manifesto
+
+The premise of this course is that _learning is inference_. Learning can be reading, undecmdstanrding, reflecting whether in our heads or with complex computing environments. We begin with the following chain of reasoning:
+
+- All events, and data collected from events, have a truth value.
+
+- Probability is the strength of plausibility of a truth value.
+
+- Inference is a process of [attaining justified true belief,](http://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0172%3Atext%3DTheaet.%3Asection%3D210a) otherwise called knowledge; learning is inference.
+
+- Justification derives from strength of plausibility, that is, the probability distribution of a hypothesis conditional on the data and any background, prior, and assumptive knowledge.
+
+- The amount of surprise, or informativeness, of the probability distribution of data given our experiences, is the criterion for statistical decision making -- it is the divergence between what we known to be true and what we find out to be true.
+
+All statistical analysis, and reasoning within analysis, begins from a disturbance in the status quo. The disturbance is the outlier, the error, the lack of understanrding, the inattentiveness to experience, the irrationality of actions that is the inconsistency of knowledge and action based on knowledge.
+
+We are surprised when the divergence between what we used to know and what we come to know is wider than we expected, that is, believed. The analysis of surprise is the core tool of this course. In a state of surprise we achieve insight, the _aha!_ moment of discovery, the _eureka_ of innovation.
+
+The course will boil down to the statistics (minimum, maximum, mean, quantiles, deviations, skewness, kurtosis) and the probability that the evidence we have to support any proposition(s) we claim. 
+
+The evidence is the strength (for example in decibels, base 10) of our hypothesis or claim. The measure of evidence is the measure of surprise and its complement informativeness of the data, current and underlying, inherent in the claim.
+
+## Tentative course schedule
+
+| Meetings | Topic | Precis | Reading |
+| :----- | :----- | :--------- | :-------- | :---- |
+|             |               |                    |             |    |
+| 4: 1/12 (M) - 1/26 (M)  | **Topic 1: Fundamental probabilistic reasoning**	| Ground rules, globe tossing: probabilistic reasoning, basic logic, expectations and the shape of data, intervals | Foote Ch. 1 Preliminaries, ASW chapter 4 |
+|             |               |                    |             |    |
+| 5: 1/29 (R) - 2/13 (R) | **Topic 2: Hypothesis testing** | Causality, generative models, credibility intervals, one and two parameter observational distributions | Foote Ch. 2, ASW Ch. |
+|             |               |                    |             |    |
+| 6: 2/17 (T) - / 2/27 (R) [PresDay 2/16 (M) $\rightarrow$ 2/17 (T)] | **Topic 3: Simple regression** | One variate, waiting, classification | Foote Ch. 3, ASW Ch.  |
+|             |               |                    |             |
+| 3: 3/2 (M) - 3/5 (R) | **What do we know so far?** |	Regroup and catch up | Topics 1-3 | Notebooks, Mid-term Exam |
+|             |               |                    |             |
+| 6: 3/9 (M) - 3/12 (R) | **Spring Recess aka Break** | Build a house, make a retreat, draw pictures, write poems | Share wisdom | 
+|             |               |                    |             |
+| 6: 3/16 (M) - 4/9 (R) [Easter 4/1 (R) - 4/6 (M)] | **Topic 4: Multiple regression** | Many variates, DAGs, confounders, cross-validation, risk and uncertainty: model comparison | Foote Topic 4, ASW Ch.  |
+|             |               |                    |             |
+| 6: 4/13 (M) - 4/24 (R) | **Topic 5: Inference is learning** | Predator-prey: time series, quality control: reliability | 8, 9 |
+|             |               |                    |             |
+| 3: 4/27 (M) - 4/30 (R) | **What do we know at long last?** |	Last stop reviews of the whole course; the final exam | Topics 1-5, Notebooks, the Final Review |
+
+**Final Exam Sections**
+
+- 2:30 PM-3:45 PM $\rightarrow$	5/7 (R) 9:30 AM	- 11:30 AM
+- 4:00 PM-5:15 PM	$\rightarrow$ 5/11 (M) 2026	1:30 PM	3:30 PM
+ 
+## Instruction and assessment
+
+### Class meeting format
+
+The course will be conducted in person and synchronously with respect to lectures and assignments. Participants are required to attend  all meetings. 
+
+The class will be run in a tutorial style (see [Gilbert Highet, The Art of Teaching, p. 121)}.](https://archive.org/details/artofteaching0000gilb_h1o5/page/120/mode/2up?q=tutorial) This means at the least each student, or team of students, meets regularly in class meetings with the instructor and together collaborates on the architecture of the emphasis, frameworks, content, and exposition of each topic and assignment. Each class meeting will follow this agenda
+
+| Block | Agenda |
+|:------------------------|:-------------------------------------|
+| Start up - 5 min  | Meet and greet, agenda and expectations |
+| Lecture / demonstration - 20 min | Develop concepts, review readings, establish vocabulary, interrelationships among concepts |
+| Initial practice - 20 min | Using simple problems, teams collaborate in developing intuitive, graphical, narrative solutions |
+| Evolving practice - 20 min | Build on simple problems and advance to more complicated and realistic scenarios collaboratively in teams with presentations at the board |
+| Wrap up - 10 min | Summarize key takeaways and set agenda for next meeting |  
+
+In the millenia-old tradition, the teacher is a kind, generous, but firm and persistent goad to push the seemingly timid into action, and the overtly enthusiastic into focus. Our work together follows the age old exhortation to encourage one another daily, while it is still today. Encouragement here is to "irrigate the deserts" in each of us and do so together, "not to cut down the jungles" ([C.S. Lewis, The Abolition of Man, p. 9}).](https://archive.org/details/in.ernet.dli.2015.88346/page/n17/mode/2up?q=irrigate+deserts)
+
+### Grading rubric for assignments
+
+Each assignment will attend to literal (phenomenological, experiential, descriptive), allegorical (explanatory, normative, reasonable), tropical (moral, responsible), anagogical (what is most important to us, the good we seek) considerations. All considerations must tie back to the literal interpretation. We are not here to conform reality to our vagaries and animadversions. Or are we? This instructor would dearly love that debate!
+
+All assignments must be neatly hand-written in the participant's notebook and submit an image of the notebook assignment solution to the course site.
+
+- 0: not submitted 
+- 1-4: incomplete assignment. No evidence of comprehension of reading materials, only restates a few facts.
+- 5-6: shows some evidence of comprehending and answering the questions posed by assignment, reflecting on the reading materials, but structuring of solution not clearly developed.
+- 7-8: shows strong evidence of comprehending, structuring and resolving the assignment, using class meeting results and reading materials
+- 9-10: the assignment contains a high degree of well-expressed assumptions, narrative, and interpretation, and shows a clear, well-read understanding and mastery of the topic.
+ 
+We will work in teams to work out solutions, but we will each submit individual assignments and posts. Individual final grades are a combination of A-F (integer ranges): A (>95), A- (90-94), B+ (85-89), B (80-84), C+ (75-79), C (70-74), D (65-69), F (<65) and the University's letter grade rubric at [https://bulletin.fordham.edu/undergraduate/academic-policies-procedures/grading-and-exams/](https://bulletin.fordham.edu/undergraduate/academic-policies-procedures/grading-and-exams/) quoted in part here.  
+
+|Letter Grade| Numerical Equivalent |Grade Description|
+|:---:|:---:|:-------------------------------|
+| A  | 4.00 | Excellent. Honors-level work, outstanding.|
+| A- | 3.67 | Still excellent.|
+| B+ | 3.33 | Very Good. High level of performance.|
+| B	 | 3.00 | Good. Solid and above-average level of performance.|
+| B- | 2.67 | Good. Above average.|
+| C+ | 2.33 | Average level of performance.|
+| C	 | 2.00	| Satisfactory. Acceptable level of performance.|
+| C- | 1.67	| Minimally Acceptable.|
+| D	 | 1.00	| Passing but unsatisfactory. Below the average level expected. The lowest passing grade.|
+| F	 | 0.00	| Failure. Inferior performance.|
+
+## Other matters
+
+### Assignment formatting
+
+All homework assignments must be turned in electronically, through the learning management system, by each student. All assignments will involve writing a combination of spreadsheet calculations and actual prose. You must submit your assignment in a format which allows for the combination of the two, which, in this course, is a formatted spreadsheet. To this end, every file submitted must have a file name which includes the student's name, course identifier, and clearly indicates the type of assignment (project) and its number (week). Here is the format we will use:
+
+- `yourName_courseidentifier_Assignment##.ext`, where ## is the essay number and ext is the file name extension. 
+
+For example W.G. Foote would submit a **xlsx** file with this filename:
+
+- `wgfoote_econXX_assignment1.xlsx`
+
+### Course specific policies
+
+Students are expected to behave in a professional and courteous manner at all times when interacting with all members of the course learning community. Respect for others is demonstrated through attendance,  meaningful participation, and punctuality. Every effort should be made to be present for each session, if not feasible, view the recording of each session, especially since weekly assignments will be made conditional on content in live sessions.
+
+All assignments must be completed and submitted by the due dates and times set out. This will allow the entire class to review and revise submissions in a timely fashion. Submissions to the Fordham learning management system BlackBoard are based on Eastern Time (UTC +5). 
+
+- Late submissions will result in student inability to accumulate the knowledge needed to advance to the next week's coverage of course topics. 
+
+- Late submission will also delay necessary instructor feedback to the student in a timely fashion. 
+
+- As the course continues to layer on more skills and capabilities, a late submission with inaccurate or incomplete requirements will only deprecate the student's ability to successfully complete future assignments, let alone the final essay.
+
+So, don't be late. Due dates are posted in the LMS (Learning Management System) to help you pace your progress through the very quickly rolling out of the several weeks of the course term. Due dates are not deadlines. However, there is one deadline from the Registrar: all grades (including Incompletes) must be posted within 48 hours of the end of the course term.
+
+### Other matters
+
+**Academic Integrity.** Academic integrity is the pursuit of scholarly activity in an honest, truthful and responsible manner. Fordham students are expected to accept the responsibility to be honest and to respect ethical standards in completing their academic assignments, assessments, and other requirements. Students are expected to adhere to academic integrity by completing all assignments and other requirements on their own without assistance from external resources (including any artificial intelligence or machine-learning tools) unless directly authorized by the instructor. It is the student's responsibility to give credit to any quotation, idea, or data used from an outside source. Students who fail to meet the responsibility for academic integrity subject themselves to sanctions ranging from a reduction in grade, course failure in the assignment, or expulsion from the University. 
+
+**Disability Services.** Under the Americans with Disabilities Act and Section 504 of the Vocational Reha
+bilitation Act of 1973, all students, with or without disabilities, are entitled to equal access to the programs and activities of Fordham University. If you believe that you have a disabling condition that may interfere  with your ability to participate in the activities, coursework, or assessment of the object of the course, you may be entitled to accommodations. Please schedule an appointment to speak with someone at the Office of Disability Services (Rose Hill– O’Hare Hall, Lower Level, 718-817-0655, or at Lincoln Center– Room 207, 718-817-6282). [By email: disabilityservices@fordham.edu](disabilityservices@fordham.edu). Accommodations are not retroactive, so you need to register with ODS prior to receiving your accommodations.
+ 
+**Economics Learning Center.** Tutors are available to assist students in preparing for class, examinations,and homework, and in mastering the fundamentals of economics free of charge. For questions related to online tutoring please reach out to the tutoring center via [email at econtutor@fordham.edu](econtutor@fordham.edu).
+ 
+**Group Project.** The Group Project comprises two components: an essay and a presentation. This section
+of the course tests your acquired knowledge of economic theory and your ability to apply it in scrutinizing
+and assessing real-world economic scenarios. Please refer to the Group Project folder in Blackboard for
+detailed guidelines, expectations, and assessment criteria.
+ 
+**Important sources of information for students.**
+ 
+- [Responding to Students in Emotional Distress](https://www.fordham.edu/student-life/deans-of-students-and-student-life/caring-for-students/responding-to-students-in-emotional-distress/)
+ 
+- [Reporting Sexual Misconduct on Campus](http://www.fordham.edu/info/23849/campus_assault_and_relationship_education/4030/caresexual_misconduct_faq)
+ 
+- [Office of Title IX/Institutional Equity and Compliance](http://www.fordham.edu/info/21435/title_ixinstitutional_equity_and_compliance)
+

@@ -1,0 +1,157 @@
+--- 
+title: "Stats II - Course Notebook"
+author: "Bill Foote"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: cites.bib
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  Notes, examples, exercises, variouos thoughts about probabilistic inference.
+link-citations: yes
+github-repo: wgfoote/book-stats-ii
+---
+
+
+# Preamble {-}
+
+![The whole is greater than the sum of the parts.](images/preamble.png)
+
+This book is a compilation of many years of experience with replying to clients (CFO, CEO, business unit leader, project manager, etc., board members) and their exclamations and desire for the number. The number might be the next quarter’s earnings per share after a failed product launch, customer switching cost and churn with the entry of a new competitor, stock return volatility and attracting managerial talent, fuel switch timing in a fleet of power plants, fastest route to ship soy from Sao Paolo to Lianyungang, launch date for refractive surgery services, relocation for end state renal care facilities, and so on, and so much so forth.
+
+Here is a highly redacted scene of a segment of a board meeting of a medical devices company in the not so distant past. All of the characters are of course fictions of a vivid imagination. The scene and the company are all too real.
+
+Sara, a board member, has the floor.
+
+>Sara: Bill, just give us the number!
+
+Bill (no relation) is the consultant that the CFO hired to provide some insight into a business issue: how many product units can be shipped in 45 days from a port on the Gulf of Mexico, USA to a port in Jiangsu Provice, PRC.
+
+>Bill: Sara, the most plausible number is 42 units through the Canal in 30 days. However, …
+
+Sara interjects.
+
+>?Sara: Finally! We have a number …
+
+Harrumphing a bit, but quietly and thinking “Not so fast!”,
+
+>Bill: Yes, 42 is plausible, but so are 36 and 45, in fact the odds are that these results, given the data and assumptions you provided our team, as well as your own beliefs about the possibilities in the first place, are even. You could bet on any of them and be consistent with the data.
+
+Jeri the CFO grins, and says to George the CEO in a loud enough whisper so that other board members perked up from their respective trances,
+
+>Jeri, CFO: That’s why we hired Bill and his team. He is giving us the range of the plausible. Now it’s up to us to pull the trigger.
+
+Sara winces, yields the floor to Jeri, who gently explains to the board,
+
+>Jeri: Thank you Bill and give our regards to your team. Excellent and extensive work in a very short time frame!
+
+Bill leaves the board room, thinking “Phew!, made through that gauntlet,
+again.”
+
+>Jeri: Now our work really begins. George, please lead us in our deliberations.
+
+Pan through the closed board room door outside to the waiting room and
+watch Bill, wiping the sweat from his brow, prepare the invoice on his laptop.
+
+A watchful administrative assistant nods his approval.
+
+## Why this book {-}
+
+This book is an analytical palimpsest which attempts to recast and reimagine the Bayesian Stan-based analytics presented by Richard @McElreath_2020 for the data analytics that help business managers and executives make decisions. Richard McElreath’s vision and examples, though reworked, are nearly immediately evident throughout. But again this work is a palimpsest with its own quirks, examples, but surely built on McElreath’s analytical architecture.
+
+The data for the models is wrangled through the R tidyverse ecosystem and approaches that Solomon Kurz uses in recasting Richard McElreath’s text with the brms R package developed by Paul Bürkner’s brms package. The concepts, even the _zeitgeist_ of a Danielle Navarro might be evident along with examples from her work on learning and reasoning in the behavioral sciences. And if there was ever a pool of behavior to dip into it is in the business domain.
+
+## Premise(s) {-}
+
+The one premise of this book is that
+_Learning is inference_.
+
+By inference we mean reaching a conclusion. Conclusions can be either true or false. They are reached by a process of reflection on what is understood and by what is experienced.
+
+Let’s clarify these terms in this journey courtesy of Potter (1994):
+
+- Ignorance is simply lack of knowledge.
+
+- Opinion is a very tentative, if not also hesitant, subject to change, assent to a conclusion.
+
+- Belief is a firm conviction.
+
+- Knowledge is belief with sufficient evidence to justify assent.
+
+= Doubt suspends assent when evidence is lacking or just too weak.
+
+- Learning can only occur with doubt or ignorance or even opinion; learning generates new knowledge. 
+
+@lonergan_insight develops the heuristic structure of human knowing about three successive movements from experience, through understanding, onto to reflection about what is and is not (plausibly of course!). The terms of each movement wind their way into the methodology of any excursus that implements human knowing about anything, including the knower, whom we often tag the analyst or decision maker. The knower observes and experiences, yes, with a bias.
+
+The course will boil down to the statistics (minimum, maximum, mean, quantiles, deviations, skewness, kurtosis) and the probability that the evidence we have to support any proposition(s) we claim. The evidence is the strength (for example in decibels, base 10) of our hypothesis or claim. The measure of evidence is the measure of surprise and its complement informativeness of the data, current and underlying, inherent in the claim. In the interests of putting the bottom line up front Here is the formula for our measure of evidence $e$ of a hypothesis $H$ comes from Edwin T. @Jaynes2004.
+
+\begin{equation}
+e(H \mid DX) = e(H \mid X ) + 10 lpg_{10} \left[ \frac{Pr(D \mid HX)}
+{Pr(D \mid \overline{H}X)} \right]
+\end{equation}
+
+Let’s parse this relationship. First $H$ is the claim, say for example, the typical null hypothesis $H_0$
+that the status quo is true. If $H = H_0$ then $\overline{H}$ (literally not $H$) must be
+the alternative hypothesis logically so that $\overline{H} = H_1$.
+
+= $D$ is the data at hand we
+observe. $X$ is the data, including data about beliefs, we already have at our disposal before we observe $D$.
+
+Now we look at the combinations. $DX$ is the logical conjunction of the two data sets. This conjunction represents the proposition that both the new data $D$ and the old data exist $X$ and are true. $HX$ is the phrase both the claim $H$ is true and the available data $X$ is true. $\overline{H}X$ is the phrase: both the claim is false and the available data $X$ are true. Here are the conditions of the contract.
+
+- We look for evidence $e(H \mid DX)$ that $H$ is true given the existence both of new data 𝐷 and available data $X$, that is $H \mid DX$ where the $A \mid B$ reads _A given B_, a conditional statement.
+
+- This compound ($D X$) depends on the evidence $𝑒(H \mid X)$ that $H$ is true given knowledge of available data $X$. 
+
+- The evidence impounded in the odds of finding data 𝐷 when the hypothesis is true 𝐻 relative to when the hypothesis is not true 𝐻.
+
+Everything is in $log_{10}$ measures to allow us the luxury of simply adding up evidence scores. What is $𝐻$? These are the hypotheses, ideas, explanations, parameters (like intercept and slope, means, standard deviations, you name it) we think when we work through answers to questions.
+
+So many questions and too little time Where in the business domain do questions arise? The usual suspects are the components of any organization’s, stakeholders’, value chain. This chain extends from questions about the who, when, where, how, how long, how much, how often, how many, for whom, for what, and why of each component. There are decisions in each link. In planning an organization’s strategy the decisions might be to examine new markets or not, invest in assets or retire them, fund innovation with shareholder equity or stand fast. In each of these decisions are questions about the size and composition of markets and competitors, the generation of cash flow from operations, the capture of value for stakeholders. It is this font from which questions will arise and analysis will attempt to guide.
+
+## Don’t we know everything we need to know? {-}
+
+We don’t seem to know everything all of the time, although we certainly have both many doubts and opinions. These hurdles are often managed through the collection of data against hypotheses, explanations, theories, and ideas. There are two bookend inferences we can make, that is, deduce plausibly.
+
+The first is the glass is half-full approach, _modus ponens_.  If A is true, then B is true. We then observe that B is true. We conclude that A becomes more plausible.
+
+Then there is the glass is half-empty view, _modus tollens_ We begin again with the implication that if A is true, then B is true. We then add data: A is false. The inference then concludes that B becomes less plausible. 
+
+There is no guarantee here, just plausible, but justified, belief. We will call plausibility a measure of belief, also known as probability.
+
+The first chapter will detail the inner workings and cognitional operations at work in these inferences. But let us remember that learning is inference.
+
+## What we desire {-}
+
+These two ways of inferring plausible, justified, true belief will be the bedrock of this book. They imply three desiderata of our methods:
+
+1. Include both the data of sensible observation and the data of assumptions and beliefs.
+
+2. Condition ideas, hypotheses, theories, explanations with the data
+of experience and belief.
+
+3. Measure the impact of data on hypotheses using a measure of plausibility.
+
+What we will call rational will be the consistency, the compatibility, of data with hypotheses measured by plausibility, to be called posterior probability. The data of beliefs will be contained in what we will call prior probability. The data of beliefs include our assumptions about the distribution of hypotheses.
+
+The conditioning of hypotheses with data is what we will call likelihood. Ultimately what we call uncertainty will be the range and plausibility of the impact of data on hypotheses. What we will solve for is the most plausible explanation given data and belief. Frequentist or probabilistic? Both.
+
+The moving parts of our reasoning demand at least a probabilistic approach if we are to summarily, if not completely ever, deal with uncertainty in our descriptions and explanations of reality. For the business decision maker this mindset becomes critical as the way in which any decision must be made if it is to be compatible with the data of experience, understanding and reflection. Practically speaking the probabilistic approach directly aligns with the heuristic structure of human knowing: experience, understanding, reflection. All are fulfilled virtually (we don’t know everything through bias, omission, ignorance, malice) a priori to the decision. Because our understanding of the future is imperfect we insert the word and idea of plausibility into every statement.
+
+Frequentism is a quasi-objective approach to analysis. It is objective in that it focuses on only the data. It is quasi-objective in that the data is collected by human knowers and doers. An assumption of the analysis is always that the data are equally likely to occur. These beings do not always have access to or even want to collect all or the right data for further deliberation. That is an interesting historical, and a priori, fact of human existence. The collection itself rails against the time, space, and resources needed for collection and thus the epithet of garbage-in and garbage-out. 
+
+However, frequentist approaches contradict their supposed objectivism in that both the data selected, collected, and deliberated up are subject (yes the subjective begins to enter) to, conditional on, the collector and the deliberator. Both frequentist and probabilistic reasoning seem to intersect when prior knowledge is all but unknown (the uninformative or diffuse prior) or might as well assign equally plausible weights (probabilities) to any hypothesis the analyst might propose about the value of a moment of a distribution. They all but diverge when uneven, lumpy, step function priors on the values of the supposed estimators as hypotheses collide with the likelihood that the data is compatible with any of these hypotheses. Such divergence is not the destruction of objectivity, rather the transparent inclusion into a complete objective description and explanation of a tradition, a set of assumptions, a font of knowledge to date. ^[Charles Sanders Pierce ( @Peirce1884 ) is perhaps the seminal study that incorporates prior knowledge into what would appear to be a frequentist null hypothesis approach, also known as _modus tollens_.]
+
+## A work in progress {-}
+
+This book will expand and contract over the days ahead. Email me with comments, errors, omissions, etc.
+
+Thanks!
+
+```{block2, type='flushright', html.tag='p'}
+Bill Foote,
+Fordham University,
+Bronx, NY
+```

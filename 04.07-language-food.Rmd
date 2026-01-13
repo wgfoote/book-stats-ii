@@ -1,0 +1,306 @@
+# Case: Language and Food
+
+Daniel Nettle is a behavioral scientist who specializes in linguistic aspects of human development. His 1998 paper on language diversity, [which we can access here](https://www.danielnettle.org.uk/download/009.pdf) poses this question.
+
+> This paper, then, asks the question of, what, in general, determines the size of language communities found in a human population. 
+
+Language is a mask for regional integration or disintegration of societies. Powerful forces can unite, or divide, whole groups of people, often identifiable by the language of their region of origin. Food security is one of several fundamental sources of movements of people from one region to another. Ecological risk, as measured by the length of the mean growing season in a region, correlates with food security. Prominently for the time, Nettle published his paper with the original data he used to conduct the analysis.
+
+The values in `data(nettle)` are data on language diversity in 74 nations. The meaning of each column is given below.
+
+1. country: Name of the country
+2. num.lang: Number of recognized languages spoken
+3. area: Area in square kilometers
+4. k.pop: Population, in thousands
+5. num.stations: Number of weather stations that provided data for the next two columns
+6. mean.growing.season: Average length of growing season, in months
+7. sd.growing.season: Standard deviation of length of growing season, in months
+
+Use these data to evaluate the hypothesis that language diversity is partly a product of food security. The notion is that, in productive ecologies, people don’t need large social networks to buffer them against a risk of food shortfalls. This means cultural groups can be smaller and more self-sufficient,leading to more languages per capita. In this way we use the number of languages per capita as the outcome.
+
+```{r, eval = FALSE}
+d$lang.per.cap <- d$num.lang / d$k.pop
+```
+
+Use the logarithm of this new variable as your regression outcome. We can continue this model using counts and the enhanced Poisson distribution. For now we use the similarly convergent Gaussian distribution. 
+
+We will evaluate the effects of both `mean.growing.season` and `sd.growing.season`, as well as their two-way interaction. 
+
+Here are three parts to help. 
+
+- First, we examine the hypothesis that language diversity, as measured by `log(lang.per.cap)`, is positively associated with the average length of the growing season, `mean.growing.season`. Consider `log(area)` in the models(s) as a covariate (not an interaction).  
+
+- Next we consider the hypothesis that language diversity is negatively associated with the standard deviation of length of growing season, `sd.growing.season`. This hypothesis follows from uncertainty in harvest favoring social insurance through larger social networks and therefore fewer languages. Again, consider `log(area)` as a covariate (not an interaction). Interpret your results. 
+
+- Finally, we assess the hypothesis that `mean.growing.season` and
+`sd.growing.season` interact to synergistically reduce language diversity. The notion is that, in nations with longer average growing seasons, high variance makes storage and redistribution even more important than it would be otherwise. That way, people can cooperate to preserve and protect harvest windfalls to be used during the droughts.
+
+### A first model set
+
+We fit three models to begin to analyze the hypothesis 
+
+> Language diversity, as measured by `log(lang.per.cap)`, is positively associated with the average length of the growing season, `mean.growing.season`.
+
+The models:
+
+1. We attempt to predict `log_lang_per_capita` ($L$) naively with a constant and no other predictors. 
+
+2. We build on the naive model with only mean growing season ($M$) as a predictor.
+
+3. We can expand on this model by including `log(area)` ($A$) to mediate growing season or to independently influence language diversity. 
+
+The mediation model has this formulation.
+
+$$
+\begin{align}
+L & \sim \operatorname{Normal}(\mu_L, \sigma_L) \\
+\mu_L & = \alpha_L + \beta_{LM} M + \beta_{LA} A\\
+\alpha_L & \sim \operatorname{Normal}(median(L),2) \\
+\beta_{LM} & \sim \operatorname{Normal}(0,2) \\
+\beta_{LA} & \sim \operatorname{Normal}(0,2) \\
+\sigma_L & \sim \operatorname{Exponential}(1) \\
+M & \sim \operatorname{Normal}(\mu_M, \sigma_M) \\
+\mu_M & = \alpha_M + \beta_{M} A\\
+\alpha_M & \sim \operatorname{Normal}(median(M),2) \\
+\beta_M & \sim \operatorname{Normal}(0,2) \\
+\sigma_M & \sim \operatorname{Exponential}(1) \\
+\end{align}
+$$
+
+In this model we literally run a regression ($\mu_M = \alpha_M + \beta_{M} A$) to help with an other regression ($\mu_L = \alpha_L + \beta_{LM} M + \beta_{LA} A$) where $\mu_M, \sigma_M$ mediate movements in the main attraction $\mu_L, \sigma_L$.
+
+All of this will deserve a comparison. We will use WAIC. A lower WAIC in one model indicates a lower loss of information measured as deviancy relative to other models. WAIC, similar to the likelihood ratio, the F-test, and even $R^2$, is a predictive statistical inference of a sort. Adding more variates increases the complexity of the models and likely will decrease information loss.
+
+A second model set would involve the standard deviation of the growing season. A third model set would divide the world into meaningful regions to examine the differences and similarities of language diversity globally.
+
+We begin with the data.
+
+```{r}
+library(rethinking)
+library(tidyverse)
+data(nettle)
+d <- nettle
+summary( d )
+```
+
+We note:
+
+- There are 68 countries represented.
+
+- The sample exhibits widely varying language diversity, area, and population.
+
+- We note the extreme distances between the 75th quantiles and the maximum. Scaling will be important in the regularization of the model.
+
+### Models
+
+```{r}
+d$L <- log( d$num.lang / d$k.pop )
+d$A <- log(d$area) 
+d$M <- d$mean.growing.season
+#
+# m-models for the mean.growing.season
+m0 <- quap(
+  alist(
+    L ~ dnorm(mu,sigma),
+    mu <- aL + 0,
+    aL ~ dnorm(5,1.5),
+    sigma ~ dexp(1)
+  ) , data=d )
+# Only M
+m1 <- quap(
+  alist(
+    L ~ dnorm(mu,sigma),
+    mu <- aL + bLM*M,
+    aL ~ dnorm(-5,1.5),
+    bLM ~ dnorm(0,0.5),
+    sigma ~ dexp(1)
+  ) , data=d )
+#
+# Independent M and A
+# M->L<-A
+m2 <- quap(
+  alist(
+    L ~ dnorm(mu,sigma),
+    mu <- aL + bLM*M + bLA*A,
+    aL ~ dnorm(-5,1.5),
+    c(bLM,bLA) ~ dnorm(0,0.5),
+    sigma ~ dexp(1)
+  ) , data=d )
+#
+# A mediating M
+# A->G->L
+# 
+m3 <- quap(
+  alist(
+    L ~ dnorm(mu,sigma),
+    mu <- aL + bLM*M + bLA*A,
+    aL ~ dnorm(-5,1.5),
+    c(bLM,bLA) ~ dnorm(0,0.5),
+    sigma ~ dexp(1),
+    M ~ dnorm(muM, sigmaM),
+    muM <- aM + bM*A,
+    aM ~ dnorm(7.4,2),
+    bM ~ dnorm(0,0.5),
+    sigmaM ~ dexp(1)
+  ) , data=d,  )
+#
+precis( m0, digits = 4, depth = 2)
+precis( m1, digits = 4, depth = 2)
+precis( m2, digits = 4, depth = 2)
+precis( m3, digits = 4, depth = 2)
+compare( m0, m1, m2, m3)
+plot( coeftab( m0, m1, m2, m3 ) )
+```
+
+More covariates usually results in less deviancy and more predictivity. But very much more?
+
+- The naive model, `m0`, is least predictive.
+
+- The two complicated models, `m2` and `m3`, are plausibly tied for second place.
+
+- The mid-complex model, `m1`, is the least deviant from an information loss point of view.
+
+Here we visualize the predictions with WAIC's cousin PSIS. Both use the Bayesian predictive likelihood. PSIS here will also provide cross-validation with the leave-one-out procedure. The horizontal axis measures the degree of unpredictability using the Pareto power $k$ parameter. The vertical axis measures the volatility of observations using the penalty component of the PSIS calculation.
+
+```{r}
+set.seed(4284)
+m <- m0
+model_name <- format( m@formula[[2]])
+PSIS_m <- PSIS( m, pointwise=TRUE )
+PSIS_m <- cbind( PSIS_m, 
+                 country = d$country
+                 )
+p0_psis <- PSIS_m |> 
+  ggplot( aes( x=k, y=penalty ) ) +
+  geom_point( shape=21, color="blue" ) + 
+  geom_vline( xintercept = 0.2, linetype = "dashed") + 
+  geom_text(aes( label = ifelse((k > 0.2)&(penalty > 0.2), as.character(country),'')), hjust = 1, vjust = 1) +
+  labs( title = "Bias",
+        subtitle = model_name,
+        x = ("Uncertainty: PSIS Pareto k"),
+        y = ("Volatility: PSIS penalty"))
+#p1 #ggplotly( p1 )
+```
+
+```{r}
+#
+m <- m0
+model_name <- format( m@formula[[2]] )
+post <- extract.samples( m) # pull 3 columns of sampled parms
+M_seq <- seq( from=0, to=12, length.out=length(d$M))                                     # evenly spaced A and M
+mu_link <- function(M){
+  # revolve around median area
+  mu <- post$aL #+ post$bLM*M + post$bLA*13
+}
+mu <- sapply( M_seq, mu_link )          # calculated line
+mu_mean <- apply( mu, 2, mean )         # make averages
+mu_PI <- apply( mu, 2, PI, prob=0.91)   # make probability intervals
+
+#
+#summary( mu_CI )
+post_tbl <- tibble(
+  M_seq = M_seq,
+  lower = t(mu_PI)[,1],
+  upper = t(mu_PI)[,2],
+  mean = mu_mean,
+  L = d$L,
+  M = d$M,
+  A = 13
+)
+# plot
+p0_pred <- post_tbl |>
+  ggplot( aes( x=M_seq, y=L ) )+
+  geom_point() +
+  geom_line( aes( x=M_seq, y=mean ), 
+             color="red" ) +
+  geom_ribbon( aes( ymin=lower, ymax=upper ), 
+               alpha=0.1, fill = "blue",  
+               color = "red", 
+               linetype = "dotted" ) +
+  labs( x = "Mean growing season",
+        y = "Number of languages",
+        title = "91% Predictive Intervals",
+        subtitle = model_name
+        )
+# p0_pred
+
+```
+
+_Commentary_
+
+(Note structural and statistical differences from the other models.)
+
+
+Model: m1
+
+```{r}
+# Run Model m1 PSIS here
+# 
+# 
+# p1_psis
+```
+
+```{r}
+# Run Model m1  Predictive Probability Intervals here
+# 
+# 
+# p1_psis
+```
+
+_Commentary_
+
+(Note structural and statistical differences from the other models.)
+
+## Model: m2
+
+```{r}
+# Run Model m1 PSIS here
+# 
+# 
+# p2_psis
+```
+
+```{r}
+# Run Model m1  Predictive Probability Intervals here
+# 
+# 
+# p2_pred
+```
+
+_Commentary_
+
+(Note structural and statistical differences from the other models.)
+
+## Model: m3
+
+```{r}
+# Run Model m3 PSIS here
+# 
+# 
+# p3_psis
+```
+
+```{r}
+# Run Model m3  Predictive Probability Intervals here
+# 
+# 
+# p3_pred
+```
+
+_Commentary_
+
+(Note structural and statistical differences from the other models.)
+
+
+## Overall assessment
+
+[Arrange plots in a grid using the **patchwork** package for ease of comparison.](https://ggplot2-book.org/arranging-plots.html)
+
+```{r}
+library(patchwork)
+p0_psis | p0_pred
+
+# for example with both models 0 and 1
+# (p0_psis / p1_psis) | (p0_pred / p1_pred) 
+```
+

@@ -1,0 +1,12 @@
+# Topic 3 -- The Test of a Simple Relationship {-}
+
+This topic will pull us through two models. One is a waiting time model which is a template for any binary classification approach. The other is a simple linear regression, built on top of the mechanics of the waiting time model. We will encounter lots of algebra here as we use a deductive expectational algebra to develop measures that matter. The math is the same we learned from middle through high school. If it is tedious, at least we can build strength in this suffering! They matter because they unlock the degree of relationship between two variables in a statistical causal model. The example is wages and education from data stored at the St. Louis Fed.
+
+Yet another simple regression model allows us to examine the relationship between the Terrain Ruggedness Index and per capita GDP in a sample of continguous west African countries. Hypothesis testing and credibility intervals; exploratory data analysis; expectational models of metrics that matter with grid approximations; Gaussian, Poisson, Binomial distributions; relative and cumulative frequency, nay, probability, tables and plots; contingency tables and conditional, logically consistent, probability; extensive use of dynamic titles in plots, INDEX and MATCH querying of data, and the basics of spreadsheet hygiene with named ranges, formula documentations with FORMULATEXT, formatting, one worksheet for each task. Yes, we covered a lot of ground!
+
+
+
+
+
+
+
